@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ofertas Iluminación</title>
+<meta name="theme-color" content="#1a1310">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="bolt"></span>
+      <div>
+        Ofertas
+        <small id="companyNameTag">Material eléctrico</small>
+      </div>
+    </div>
+    <nav class="tabs">
+      <button class="tab-btn active" data-view="oferta">Nueva oferta</button>
+      <button class="tab-btn" data-view="registro">Registro</button>
+      <button class="tab-btn" data-view="ajustes">Ajustes</button>
+    </nav>
+    <div class="sync-pill no-print">
+      <span class="sync-dot off" id="syncDot"></span>
+      <span id="syncText">Sin sincronizar</span>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============ VISTA: NUEVA OFERTA ============ -->
+    <section class="view active" id="view-oferta">
+
+      <div class="card">
+        <h2><span class="eyebrow">Datos de la oferta</span>Cabecera</h2>
+        <div class="field-row">
+          <div>
+            <label>Nº Oferta</label>
+            <input type="text" id="f-numero" readonly>
+          </div>
+          <div>
+            <label>Fecha</label>
+            <input type="date" id="f-fecha">
+          </div>
+          <div>
+            <label>Cliente</label>
+            <input type="text" id="f-cliente" placeholder="Ej. SONEPAR SAGUNTO">
+          </div>
+        </div>
+        <div class="field-row">
+          <div>
+            <label>Obra</label>
+            <input type="text" id="f-obra" placeholder="Ej. ELECNOR SAGUNTO">
+          </div>
+          <div>
+            <label>Descuento general por defecto (%)</label>
+            <input type="number" id="f-dtogeneral" value="40" step="0.5">
+          </div>
+          <div>
+            <label>Margen comercial por defecto (%)</label>
+            <input type="number" id="f-benf" value="7" step="0.5">
+            <p class="helptext">Se aplica a las líneas nuevas; puedes cambiarlo línea a línea.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2><span class="eyebrow">Líneas</span>Posiciones de la oferta</h2>
+        <div class="table-wrap">
+          <table class="lines" id="linesTable">
+            <thead>
+              <tr>
+                <th style="width:34px">#</th>
+                <th style="width:60px">Cant.</th>
+                <th class="col-codigo">Código</th>
+                <th class="col-desc">Descripción</th>
+                <th style="width:75px">PVP</th>
+                <th style="width:75px">Dto %</th>
+                <th style="width:70px">Extra 1 %</th>
+                <th style="width:70px">Extra 2 %</th>
+                <th style="width:70px">RAEE ud</th>
+                <th style="width:75px">Margen %</th>
+                <th style="width:90px">Neto ud</th>
+                <th style="width:100px">Subtotal</th>
+                <th style="width:36px"></th>
+              </tr>
+            </thead>
+            <tbody id="linesBody"></tbody>
+          </table>
+        </div>
+        <div style="margin-top:12px;">
+          <button class="btn" id="btnAddLine">+ Añadir línea</button>
+        </div>
+
+        <div class="totals">
+          <div class="totals-box">
+            <div class="totals-row"><span>Neto sin RAEE ni IVA</span><span id="t-neto">0,00 €</span></div>
+            <div class="totals-row"><span>RAEE</span><span id="t-raee">0,00 €</span></div>
+            <div class="totals-row"><span>Base imponible</span><span id="t-base">0,00 €</span></div>
+            <div class="totals-row"><span>IVA (21%)</span><span id="t-iva">0,00 €</span></div>
+            <div class="totals-row grand"><span>TOTAL</span><span id="t-total">0,00 €</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card no-print" style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-primary" id="btnGuardar">💾 Guardar oferta</button>
+        <button class="btn" id="btnDuplicar" style="display:none;">🧬 Duplicar como nueva oferta</button>
+        <button class="btn" id="btnPDF">📄 Generar PDF</button>
+        <button class="btn btn-ghost" id="btnNueva">＋ Nueva oferta en blanco</button>
+        <button class="btn btn-ghost btn-danger" id="btnEliminar" style="display:none;">Eliminar esta oferta</button>
+      </div>
+
+    </section>
+
+    <!-- ============ VISTA: REGISTRO ============ -->
+    <section class="view" id="view-registro">
+      <div class="card">
+        <h2><span class="eyebrow">Histórico</span>Registro de ofertas</h2>
+        <div class="registro-toolbar">
+          <input type="text" id="regSearch" placeholder="Buscar por cliente, obra o nº oferta…">
+          <label class="check-inline"><input type="checkbox" id="regSoloPendientes"> Solo pendientes de reclamar (+2 meses)</label>
+          <button class="btn btn-sm" id="btnRefreshReg">↻ Actualizar</button>
+        </div>
+        <div class="table-wrap">
+          <table class="registro">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Antigüedad</th>
+                <th>Nº Oferta</th>
+                <th>Cliente</th>
+                <th>Obra</th>
+                <th>Importe total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="regBody"></tbody>
+          </table>
+        </div>
+        <div class="empty-state" id="regEmpty" style="display:none;">
+          <div class="bolt-big"></div>
+          Todavía no hay ofertas guardadas.
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ VISTA: AJUSTES ============ -->
+    <section class="view" id="view-ajustes">
+      <div class="card">
+        <h2><span class="eyebrow">Sincronización</span>Conexión con Firebase</h2>
+        <p class="helptext">Pega aquí la configuración de tu proyecto Firebase (Firestore) para que las ofertas se sincronicen entre el móvil y el PC. Instrucciones completas en el README del proyecto.</p>
+        <div class="field-row">
+          <div style="grid-column:1/-1;">
+            <label>Configuración Firebase (objeto firebaseConfig en JSON)</label>
+            <textarea id="firebaseConfigInput" rows="8" style="font-family:var(--font-mono); font-size:12.5px;" placeholder='{"apiKey":"...","authDomain":"...","projectId":"...","storageBucket":"...","messagingSenderId":"...","appId":"..."}'></textarea>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="btnSaveConfig">Guardar y conectar</button>
+        <button class="btn btn-ghost" id="btnClearConfig">Borrar configuración</button>
+        <p class="helptext" id="configStatus"></p>
+      </div>
+
+      <div class="card">
+        <h2><span class="eyebrow">Empresa</span>Datos para el PDF del presupuesto</h2>
+        <div class="field-row">
+          <div style="grid-column:1/-1; display:flex; align-items:center; gap:16px;">
+            <img id="logoPreview" src="" alt="" style="height:56px; max-width:220px; object-fit:contain; background:#fff; border-radius:6px; padding:4px; display:none;">
+            <div>
+              <label>Logotipo (para el PDF)</label>
+              <input type="file" id="cfg-logo" accept="image/*">
+              <p class="helptext">Por defecto se usa el logo de Disano Iluminación. Puedes subir otro si haces ofertas de otra marca.</p>
+              <button class="btn btn-ghost btn-sm" id="btnLogoDefault" type="button">Usar logo de Disano</button>
+            </div>
+          </div>
+        </div>
+        <div class="field-row">
+          <div>
+            <label>Nombre de la empresa</label>
+            <input type="text" id="cfg-empresa" placeholder="Tu empresa S.L.">
+          </div>
+          <div>
+            <label>CIF / NIF</label>
+            <input type="text" id="cfg-cif" placeholder="B-00000000">
+          </div>
+          <div>
+            <label>Teléfono</label>
+            <input type="text" id="cfg-telefono" placeholder="600 000 000">
+          </div>
+        </div>
+        <div class="field-row">
+          <div style="grid-column:1/-1;">
+            <label>Dirección</label>
+            <input type="text" id="cfg-direccion" placeholder="Calle, número, ciudad">
+          </div>
+        </div>
+        <div class="field-row">
+          <div>
+            <label>Email</label>
+            <input type="text" id="cfg-email" placeholder="ventas@tuempresa.com">
+          </div>
+          <div>
+            <label>Validez de la oferta (días)</label>
+            <input type="number" id="cfg-validez" value="30">
+          </div>
+          <div>
+            <label>IVA (%)</label>
+            <input type="number" id="cfg-iva" value="21">
+          </div>
+        </div>
+        <button class="btn btn-primary" id="btnSaveCompany">Guardar datos de empresa</button>
+      </div>
+
+      <div class="card">
+        <h2><span class="eyebrow">Catálogo</span>Tarifa de productos</h2>
+        <p class="helptext" id="catalogStatus">Cargando catálogo…</p>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="toast"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="js/logo-data.js"></script>
+<script src="js/catalog.js"></script>
+<script src="js/store.js"></script>
+<script src="js/pdf.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
