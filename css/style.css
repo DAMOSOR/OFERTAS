@@ -307,6 +307,7 @@ td.num input{text-align:right;}
   align-items:center;
 }
 .registro-toolbar input[type=text]{max-width:280px;}
+.registro-toolbar select{width:auto; max-width:200px;}
 .check-inline{
   display:flex;
   align-items:center;
@@ -339,6 +340,19 @@ table.registro tr:hover td{background:var(--panel-2);}
   border-radius:5px;
   color:var(--amber);
 }
+.badge-estado{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  font-size:12px;
+  font-weight:700;
+  padding:3px 9px;
+  border-radius:20px;
+  white-space:nowrap;
+}
+.badge-estado.pendiente{background:rgba(232,163,61,.14); color:var(--amber); border:1px solid rgba(232,163,61,.3);}
+.badge-estado.ganada{background:rgba(111,185,143,.16); color:var(--good); border:1px solid rgba(111,185,143,.35);}
+.badge-estado.perdida{background:rgba(209,104,92,.16); color:var(--bad); border:1px solid rgba(209,104,92,.35);}
 
 /* ---------- Toast ---------- */
 #toast{

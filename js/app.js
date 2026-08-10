@@ -268,6 +268,7 @@
     document.getElementById('f-obra').value = '';
     document.getElementById('f-dtogeneral').value = 40;
     document.getElementById('f-benf').value = 7;
+    document.getElementById('f-estado').value = 'pendiente';
     document.getElementById('linesBody').innerHTML = '';
     document.getElementById('btnEliminar').style.display = 'none';
     document.getElementById('btnDuplicar').style.display = 'none';
@@ -285,6 +286,7 @@
     document.getElementById('f-obra').value = o.obra || '';
     document.getElementById('f-dtogeneral').value = o.dtoGeneral ?? 40;
     document.getElementById('f-benf').value = o.benf ?? 7;
+    document.getElementById('f-estado').value = o.estado || 'pendiente';
     document.getElementById('linesBody').innerHTML = '';
     (o.lineas || []).forEach(l => addLine(l));
     if (!(o.lineas || []).length) addLine();
@@ -320,6 +322,7 @@
       cliente, obra,
       dtoGeneral: num(document.getElementById('f-dtogeneral').value),
       benf: num(document.getElementById('f-benf').value),
+      estado: document.getElementById('f-estado').value || 'pendiente',
       lineas,
       totales: totals,
       importeTotal: totals.total
@@ -352,6 +355,7 @@
     const nuevoNumero = generarNumeroOferta();
     document.getElementById('f-numero').value = nuevoNumero;
     document.getElementById('f-fecha').value = toISODate(new Date());
+    document.getElementById('f-estado').value = 'pendiente';
     currentNumero = null;
     document.getElementById('btnEliminar').style.display = 'none';
     document.getElementById('btnDuplicar').style.display = 'none';
@@ -391,10 +395,17 @@
     return meses + (meses === 1 ? ' mes' : ' meses');
   }
 
+  const ESTADO_LABEL = {
+    pendiente: { icon: '🟡', text: 'Pendiente' },
+    ganada: { icon: '🟢', text: 'Ganada' },
+    perdida: { icon: '🔴', text: 'Perdida' }
+  };
+
   function renderRegistro(filter) {
     const body = document.getElementById('regBody');
     const empty = document.getElementById('regEmpty');
     const soloPendientes = document.getElementById('regSoloPendientes').checked;
+    const filtroEstado = document.getElementById('regFiltroEstado').value;
     let list = Store.list();
     if (filter) {
       const q = filter.toLowerCase();
@@ -403,6 +414,9 @@
         (o.obra || '').toLowerCase().includes(q) ||
         (o.numero || '').toLowerCase().includes(q)
       );
+    }
+    if (filtroEstado !== 'todas') {
+      list = list.filter(o => (o.estado || 'pendiente') === filtroEstado);
     }
     if (soloPendientes) {
       list = list.filter(o => {
@@ -414,16 +428,20 @@
     empty.style.display = list.length ? 'none' : 'block';
     list.forEach(o => {
       const dias = diasDesde(o.fecha);
-      const stale = dias !== null && dias >= DIAS_AVISO;
+      const estado = o.estado || 'pendiente';
+      // el aviso de "reclamar" solo tiene sentido mientras la oferta sigue pendiente
+      const stale = estado === 'pendiente' && dias !== null && dias >= DIAS_AVISO;
       const tr = document.createElement('tr');
       if (stale) tr.classList.add('row-stale');
       const fecha = o.fecha ? new Date(o.fecha).toLocaleDateString('es-ES') : '';
+      const est = ESTADO_LABEL[estado] || ESTADO_LABEL.pendiente;
       tr.innerHTML = `
         <td>${fecha}</td>
         <td>${stale ? '🔴 ' : ''}${fmtAntiguedad(dias)}</td>
         <td><span class="badge">${o.numero}</span></td>
         <td>${o.cliente || ''}</td>
         <td>${o.obra || ''}</td>
+        <td><span class="badge-estado ${estado}">${est.icon} ${est.text}</span></td>
         <td class="num">${money(o.importeTotal || (o.totales && o.totales.total) || 0)}</td>
         <td><button class="btn btn-sm btn-open">Abrir</button></td>
       `;
@@ -434,6 +452,7 @@
 
   document.getElementById('regSearch').addEventListener('input', (e) => renderRegistro(e.target.value));
   document.getElementById('btnRefreshReg').addEventListener('click', () => renderRegistro(document.getElementById('regSearch').value));
+  document.getElementById('regFiltroEstado').addEventListener('change', () => renderRegistro(document.getElementById('regSearch').value));
   document.getElementById('regSoloPendientes').addEventListener('change', () => renderRegistro(document.getElementById('regSearch').value));
 
   // ---------- ajustes ----------
