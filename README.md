@@ -172,3 +172,15 @@ cambios que hayas hecho, sin tocar ni sobrescribir la original.
 
 "Guardar oferta" sigue sirviendo para corregir la oferta que tienes abierta en ese momento
 (por ejemplo, si te equivocaste en una cantidad).
+
+## Estado de la oferta (Pendiente / Ganada / Perdida)
+
+En la cabecera de cada oferta hay un selector **"Estado de la oferta"** con tres opciones:
+🟡 Pendiente, 🟢 Ganada, 🔴 Perdida. Al guardar, ese estado queda registrado.
+
+En el **Registro** puedes filtrar por estado con el desplegable de arriba, y cada oferta
+muestra su insignia de color correspondiente. El aviso de "pendiente de reclamar" (fila
+sombreada en rojo por antigüedad de +2 meses) solo se aplica mientras la oferta sigue en
+estado Pendiente: en cuanto la marcas como Ganada o Perdida, deja de avisarte por esa oferta.
+
+Las ofertas nuevas y las duplicadas empiezan siempre en estado Pendiente.

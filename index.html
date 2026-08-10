@@ -70,6 +70,16 @@
             <p class="helptext">Se aplica a las líneas nuevas; puedes cambiarlo línea a línea.</p>
           </div>
         </div>
+        <div class="field-row">
+          <div>
+            <label>Estado de la oferta</label>
+            <select id="f-estado">
+              <option value="pendiente">🟡 Pendiente</option>
+              <option value="ganada">🟢 Ganada</option>
+              <option value="perdida">🔴 Perdida</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       <div class="card">
@@ -127,6 +137,12 @@
         <h2><span class="eyebrow">Histórico</span>Registro de ofertas</h2>
         <div class="registro-toolbar">
           <input type="text" id="regSearch" placeholder="Buscar por cliente, obra o nº oferta…">
+          <select id="regFiltroEstado">
+            <option value="todas">Todos los estados</option>
+            <option value="pendiente">🟡 Pendientes</option>
+            <option value="ganada">🟢 Ganadas</option>
+            <option value="perdida">🔴 Perdidas</option>
+          </select>
           <label class="check-inline"><input type="checkbox" id="regSoloPendientes"> Solo pendientes de reclamar (+2 meses)</label>
           <button class="btn btn-sm" id="btnRefreshReg">↻ Actualizar</button>
         </div>
@@ -139,6 +155,7 @@
                 <th>Nº Oferta</th>
                 <th>Cliente</th>
                 <th>Obra</th>
+                <th>Estado</th>
                 <th>Importe total</th>
                 <th></th>
               </tr>

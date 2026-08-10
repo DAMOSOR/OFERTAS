@@ -1,4 +1,4 @@
-const CACHE = 'ofertas-app-v7';
+const CACHE = 'ofertas-app-v8';
 const ASSETS = [
   './',
   './index.html',
