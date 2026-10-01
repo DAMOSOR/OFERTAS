@@ -184,3 +184,18 @@ sombreada en rojo por antigüedad de +2 meses) solo se aplica mientras la oferta
 estado Pendiente: en cuanto la marcas como Ganada o Perdida, deja de avisarte por esa oferta.
 
 Las ofertas nuevas y las duplicadas empiezan siempre en estado Pendiente.
+
+## Seguimiento (anotaciones por oferta)
+
+En el **Registro**, junto al botón "Abrir" de cada oferta hay un botón **"📝 Seguimiento"**
+(con un contador si ya tiene anotaciones). Al pulsarlo se abre un cuadro donde puedes:
+
+- Ver el histórico de anotaciones de esa oferta, con fecha y hora, de la más reciente a la
+  más antigua.
+- Añadir una anotación nueva (ej. "Llamado a Elecnor, pide revisar precio de emergencias").
+  Atajo: Ctrl+Enter (o Cmd+Enter en Mac) para añadir sin tocar el botón.
+
+Las anotaciones se guardan dentro de la propia oferta (sincronizadas igual que el resto si
+tienes Firebase conectado) y también se pueden encontrar con el buscador del Registro: si
+escribes algo que esté dentro de una anotación, la oferta correspondiente aparecerá en los
+resultados.
